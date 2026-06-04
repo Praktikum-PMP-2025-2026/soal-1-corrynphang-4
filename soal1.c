@@ -109,7 +109,7 @@ int main(){
         }else if (pos == 4){
             int cari= search(&head,data);
             if (cari != -1){
-                printf("FOUND %d \n", cari);
+                printf("FOUND %d\n", cari);
             }else{
         printf("NOT FOUND\n");
         }}
