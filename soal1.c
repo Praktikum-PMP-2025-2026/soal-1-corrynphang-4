@@ -17,7 +17,6 @@ Simulasikan linked list berdasarkan serangkaian operasi.
 #include <stdbool.h>
  struct gerbong {
     int data;
-    int pos;
     struct gerbong* next;
  };
 
@@ -67,48 +66,56 @@ void delete(struct gerbong** head_ref, int key)
     prev->next = temp->next;
     free(temp); 
 }
-
-bool search(struct gerbong* head, int x)
+int search(struct gerbong** head_ref,int data)
 {
-    struct gerbong* current = head;  
-    int loc=1;
-    while (current != NULL)
+    struct gerbong *temp = *head_ref;
+    int ctr = 1;
+    while (temp->next != NULL)
     {
-        if (current->data == x){
-            return true;
-        }else{
-            loc++;
+        if (temp->data == data)
+            break;
+        else
+        {
+            ctr++;
+            temp = temp->next;
         }
-        current = current->next;
     }
+    return ctr; 
 }
 
  void list(struct gerbong* node){
-    struct gerbong* temp = head;
-    if (temp == NULL){
+    if (node == NULL){
         printf("LIST EMPTY\n");
         return;
     }
     printf("LIST ");
-    while (temp != NULL){
-        printf("%d ", temp->data);
-        temp = temp->next;
+    while (node != NULL){
+        printf("%d ", node->data);
+        node = node->next;
     }
+    printf("\n");
  }
 
 int main(){
     struct gerbong *head = NULL;
-
     int data,pos,q;
     scanf("%d ", &q);
+    printf("%d\n",q);
     while (q !=1){
         scanf("%d %d ",&pos,&data);
+        printf ("%d %d\n",pos, data );
         if(pos == 1){
             push(&head,data);
         }else if (pos ==2){
             append(&head,data);
         }else if (pos == 3){
             delete(&head,data);
+        }else if (pos == 4){
+            int cari= search(&head,data);
+            if (cari <= q)
+        printf("FOUND %d \n", cari);
+    else
+        printf("NOT FOUND\n");
         }
         q--;
     }
