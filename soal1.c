@@ -69,7 +69,7 @@ void delete(struct gerbong** head_ref, int key)
 int search(struct gerbong** head_ref,int data)
 {
     struct gerbong *temp = *head_ref;
-    int ctr = 1;
+    int ctr = 0;
     while (temp->next != NULL)
     {
         if (temp->data == data)
@@ -100,10 +100,8 @@ int main(){
     struct gerbong *head = NULL;
     int data,pos,q;
     scanf("%d ", &q);
-    printf("%d\n",q);
     while (q !=1){
         scanf("%d %d ",&pos,&data);
-        printf ("%d %d\n",pos, data );
         if(pos == 1){
             push(&head,data);
         }else if (pos ==2){
@@ -112,12 +110,13 @@ int main(){
             delete(&head,data);
         }else if (pos == 4){
             int cari= search(&head,data);
-            if (cari <= q)
-        printf("FOUND %d \n", cari);
-    else
+            if (cari <= q){
+                printf("FOUND %d \n", cari);
+            }else{
         printf("NOT FOUND\n");
-        }
+        }}
         q--;
+    
     }
     
     list(head);
