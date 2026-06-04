@@ -14,7 +14,7 @@ Simulasikan linked list berdasarkan serangkaian operasi.
 
  #include <stdio.h>
  #include <stdlib.h>
-
+#include <stdbool.h>
  struct gerbong {
     int data;
     int pos;
@@ -23,42 +23,95 @@ Simulasikan linked list berdasarkan serangkaian operasi.
 
  struct gerbong* head = NULL;
 
- void push_front(int* data, int pos){
-    struct gerbong* newNode = (struct gerbong*)malloc(sizeof(struct gerbong));
-    newNode->data = data;
-    newNode->pos =pos;
-    newNode->next = NULL;
+ void push(struct gerbong** head_ref, int new_data)
+{
+    struct gerbong* new_node = (struct gerbong*) malloc(sizeof(struct gerbong));
+    new_node->data  = new_data;
+    new_node->next = (*head_ref);
+    (*head_ref)    = new_node;
+}
 
-    if (head == NULL){
-        head = newNode;
+void append(struct gerbong** head_ref, int new_data)
+{
+    struct gerbong* new_node = (struct gerbong*) malloc(sizeof(struct gerbong));
+    struct gerbong *last = *head_ref;  
+    new_node->data  = new_data;
+    new_node->next = NULL;
+    if (*head_ref == NULL)
+    {
+       *head_ref = new_node;
+       return;
+    }
+    while (last->next != NULL){
+        last = last->next;
+    }
+        
+    last->next = new_node;
+    return;
+}
+
+void delete(struct gerbong** head_ref, int key)
+{
+    struct gerbong *temp = *head_ref, *prev;
+    if (temp != NULL && temp->data == key) {
+        *head_ref = temp->next;
+        free(temp); 
         return;
     }
-    struct gerbong* temp = head;
-    while (temp->next != NULL){
+    while (temp != NULL && temp->data != key) {
+        prev = temp;
         temp = temp->next;
     }
-    temp->next = newNode;
- }
+    if (temp == NULL)
+        return;
+    prev->next = temp->next;
+    free(temp); 
+}
 
- void delete(int data){
-    struct gerbong * temp = head, *prev = NULL;
-    if (temp != NULL && temp->data == data){
-        head = temp -> next;
-        free(temp);
+bool search(struct gerbong* head, int x)
+{
+    struct gerbong* current = head;  
+    int loc=1;
+    while (current != NULL)
+    {
+        if (current->data == x){
+            return true;
+        }else{
+            loc++;
+        }
+        current = current->next;
     }
- }
+}
 
- void list(){
+ void list(struct gerbong* node){
     struct gerbong* temp = head;
     if (temp == NULL){
         printf("LIST EMPTY\n");
         return;
     }
-
     printf("LIST ");
     while (temp != NULL){
         printf("%d ", temp->data);
-        temp = temp->next
+        temp = temp->next;
     }
  }
- 
+
+int main(){
+    struct gerbong *head = NULL;
+
+    int data,pos,q;
+    scanf("%d ", &q);
+    while (q !=1){
+        scanf("%d %d ",&pos,&data);
+        if(pos == 1){
+            push(&head,data);
+        }else if (pos ==2){
+            append(&head,data);
+        }else if (pos == 3){
+            delete(&head,data);
+        }
+        q--;
+    }
+    
+    list(head);
+}
